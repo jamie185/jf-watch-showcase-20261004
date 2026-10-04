@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JF Coach on your wrist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#222326; --ink2:rgba(31,32,37,.60); --ink3:rgba(31,32,37,.38); --cap:#8A8F99;
+    --canvas:#F5F7FB; --card:#EBF0F8; --dark:#1F2025; --hair:#ECEEF2;
+    --strain:#F5A524; --ok:#8BD42A; --info:#4DA3FF;
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,-apple-system,sans-serif;font-weight:500;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1380px;margin:0 auto;padding:0 30px}
+  section{padding:140px 0}
+  h1,h2,h3{font-weight:600;letter-spacing:-.03em;line-height:1.0}
+  h1{font-size:clamp(46px,7vw,88px)}
+  h2{font-size:clamp(40px,5.2vw,64px)}
+  h3{font-size:clamp(24px,2.4vw,32px);letter-spacing:-.02em}
+  .sub{font-size:clamp(19px,1.8vw,24px);line-height:1.3;color:var(--ink2);margin-top:22px;max-width:640px}
+  .center{text-align:center}.center .sub{margin-left:auto;margin-right:auto}
+
+  /* nav */
+  nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:10;display:flex;gap:4px;align-items:center;
+      padding:6px 6px 6px 18px;border-radius:128px;background:rgba(255,255,255,.6);backdrop-filter:blur(24px) saturate(1.6);
+      -webkit-backdrop-filter:blur(24px) saturate(1.6);box-shadow:0 16px 40px -18px rgba(30,40,70,.35)}
+  nav b{font-weight:700;letter-spacing:-.02em;margin-right:10px}
+  nav a{font-size:14px;color:var(--ink2);text-decoration:none;padding:8px 12px;border-radius:128px;transition:background .3s var(--ease)}
+  nav a:hover{background:var(--card);color:var(--ink)}
+
+  /* watch frames */
+  .aw{position:relative;border-radius:27%/23%;padding:9px;background:linear-gradient(145deg,#3a3c42,#111214);
+      box-shadow:0 30px 60px -28px rgba(20,25,40,.55),inset 0 0 0 1px rgba(255,255,255,.06)}
+  .aw img{border-radius:23%/19%;width:100%}
+  .aw::after{content:"";position:absolute;right:-7px;top:24%;width:7px;height:15%;border-radius:0 6px 6px 0;background:#2a2b30}
+  .ow{border-radius:50%;padding:10px;background:linear-gradient(145deg,#3a3c42,#111214);box-shadow:0 30px 60px -28px rgba(20,25,40,.55)}
+  .ow img{border-radius:50%;width:100%}
+
+  /* hero */
+  .hero{padding:190px 0 120px;text-align:center;overflow:hidden}
+  .hero .sub{margin-left:auto;margin-right:auto}
+  .hero .row{display:flex;justify-content:center;align-items:flex-end;gap:34px;margin-top:80px}
+  .hero .aw{width:min(250px,26vw)}
+  .hero .aw.mid{width:min(300px,31vw);transform:translateY(-26px)}
+  .cta{display:inline-block;margin-top:36px;background:var(--dark);color:#EBF0F8;font-size:16px;font-weight:600;padding:13px 22px;border-radius:128px;text-decoration:none;transition:transform .3s var(--ease)}
+  .cta:hover{transform:scale(1.04)}
+
+  /* feature cards */
+  .feature{background:var(--card);border-radius:24px;padding:70px 60px;display:grid;grid-template-columns:1fr 1.3fr;gap:50px;align-items:center;margin-top:24px}
+  .feature .txt p{font-size:18px;line-height:1.45;color:var(--ink2);margin-top:16px;max-width:420px}
+  .shots{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+  .shots figure{width:200px}
+  figcaption{font-size:14px;color:var(--cap);text-align:center;margin-top:14px;line-height:1.35}
+
+  /* dark sync section */
+  .dark{background:var(--dark);color:#fff}
+  .dark .sub{color:rgba(255,255,255,.55)}
+  .pairs{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:80px}
+  .pair{background:#2A2B31;border-radius:24px;padding:34px 26px 30px;display:flex;flex-direction:column;align-items:center}
+  .pair .dev{display:flex;align-items:center;gap:18px}
+  .pair .phone{width:190px;border-radius:30px;border:7px solid #0d0e10;box-shadow:0 30px 60px -28px rgba(0,0,0,.7)}
+  .pair .aw{width:130px;padding:6px}
+  .pair .aw::after{right:-5px;width:5px}
+  .pair h3{font-size:22px;margin-top:28px;text-align:center}
+  .pair p{font-size:15px;color:rgba(255,255,255,.55);text-align:center;margin-top:10px;line-height:1.4;max-width:300px}
+
+  /* wear */
+  .wear{display:flex;flex-wrap:wrap;justify-content:center;gap:34px 26px;margin-top:80px}
+  .wear figure{width:min(230px,calc(25% - 20px))}
+
+  /* status */
+  .status{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:60px}
+  .st{background:#fff;border-radius:18px;padding:26px 28px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .st .k{font-size:14px;color:var(--cap)}
+  .st .v{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-top:6px;display:flex;align-items:center;gap:10px}
+  .st .d{font-size:15px;color:var(--ink2);margin-top:8px;line-height:1.4}
+  .dot{width:10px;height:10px;border-radius:50%;flex:none}
+  .canvas{background:var(--canvas)}
+  .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:16px}
+  .fact{background:#fff;border-radius:18px;padding:24px;box-shadow:0 1px 0 rgba(0,0,0,.03)}
+  .fact .n{font-size:44px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .fact .l{font-size:15px;color:var(--ink2);margin-top:10px;line-height:1.35}
+  footer{padding:60px 0 80px;text-align:center;color:var(--cap);font-size:14px}
+
+  /* motion */
+  .rv{opacity:0;transform:translateY(28px);filter:blur(8px);transition:opacity 1s var(--ease),transform 1s var(--ease),filter 1s var(--ease)}
+  .rv.in{opacity:1;transform:none;filter:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;filter:none;transition:none}html{scroll-behavior:auto}}
+
+  @media (max-width:900px){
+    section{padding:100px 0}
+    .wrap{padding:0 18px}
+    nav a.h{display:none}
+    .feature{grid-template-columns:1fr;padding:44px 24px;gap:36px}
+    .shots figure{width:150px}
+    .pairs{grid-template-columns:1fr}
+    .wear figure{width:calc(50% - 14px)}
+    .status,.facts{grid-template-columns:1fr 1fr}
+    .hero .row{gap:14px}
+  }
+  @media (max-width:520px){.status,.facts{grid-template-columns:1fr}.shots figure{width:44%}}
+</style>
+</head>
+<body>
+
+<nav><b>JF Coach</b><a href="#watch" class="h">Apple Watch</a><a href="#sync" class="h">In sync</a><a href="#wear" class="h">Wear OS</a><a href="#status">Status</a></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <h1 class="rv">Your workout.<br>On your wrist.</h1>
+    <p class="sub rv">Start on your iPhone. Track every set from your watch. No unlocking your phone.</p>
+    <a class="cta rv" href="#watch">See it on the watch</a>
+    <div class="row">
+      <div class="aw rv"><img src="img/aw-row.webp" alt="Exercise page, 2 of 4, Seated Cable Row"></div>
+      <div class="aw mid rv"><img src="img/aw-tick.webp" alt="Rest timer, 1:28, Next: Seated Cable Row"></div>
+      <div class="aw rv"><img src="img/aw-celebrate.webp" alt="Workout 12 done, 2 new personal bests"></div>
+    </div>
+  </div>
+</header>
+
+<section id="watch" style="padding-top:60px">
+  <div class="wrap">
+    <div class="center">
+      <h2 class="rv">Big, bold and<br>made for the gym.</h2>
+      <p class="sub rv">One exercise per screen. Swipe left and right. Always know where you're up to.</p>
+    </div>
+
+    <div class="feature rv">
+      <div class="txt">
+        <h3>One exercise.<br>One screen.</h3>
+        <p>Swipe through your workout. "2 of 4" sits at the top so you always know where you are. The next set is highlighted, ready to go.</p>
+      </div>
+      <div class="shots">
+        <figure><div class="aw"><img src="img/aw-workout.webp" alt="Sets logged on Barbell Bench Press"></div><figcaption>Logged sets turn green</figcaption></figure>
+        <figure><div class="aw"><img src="img/aw-row.webp" alt="Next exercise"></div><figcaption>Swipe to the next exercise</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feature rv">
+      <div class="txt">
+        <h3>Tick it.<br>Or type it.</h3>
+        <p>Tick a set to log the numbers already filled in. Did 15 instead of 12? Tap the set, even after ticking it, and type the real number. The Digital Crown nudges it too.</p>
+      </div>
+      <div class="shots">
+        <figure><div class="aw"><img src="img/aw-keypad.webp" alt="Keypad with reps and kg"></div><figcaption>Keypad for reps and weight</figcaption></figure>
+        <figure><div class="aw"><img src="img/aw-fold.webp" alt="Rest folded into the corner"></div><figcaption>Rest folds into the corner</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feature rv">
+      <div class="txt">
+        <h3>Rest that<br>runs itself.</h3>
+        <p>A tick starts your rest timer, the same one your phone shows. A tap on your wrist at 3, 2, 1, then a firm buzz when it's time to go. +15 s or Skip if you need it.</p>
+      </div>
+      <div class="shots">
+        <figure><div class="aw"><img src="img/aw-rest.webp" alt="Rest 1:10, Next set 3"></div><figcaption>Rest, with what's next</figcaption></figure>
+        <figure><div class="aw"><img src="img/aw-tick.webp" alt="Rest 1:28 after a tick"></div><figcaption>Starts the moment you tick</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feature rv">
+      <div class="txt">
+        <h3>Rate it.<br>Celebrate it.</h3>
+        <p>Finish on the watch, rate how hard it was on the dial with the Digital Crown, press Complete. Then the same celebration as your phone, with your workout number and personal bests.</p>
+      </div>
+      <div class="shots">
+        <figure><div class="aw"><img src="img/aw-finish.webp" alt="Finish workout summary"></div><figcaption>Finish</figcaption></figure>
+        <figure><div class="aw"><img src="img/aw-rate.webp" alt="How hard dial, Moderate 6/10"></div><figcaption>Rate it on the dial</figcaption></figure>
+        <figure><div class="aw"><img src="img/aw-celebrate.webp" alt="Workout 12 done"></div><figcaption>Celebrate, with PBs</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="feature rv">
+      <div class="txt">
+        <h3>Opens by itself.</h3>
+        <p>Start a workout on your phone and JF Coach opens on your watch. It keeps working with your phone locked in your pocket, and saves the workout to Apple Health.</p>
+      </div>
+      <div class="shots">
+        <figure><div class="aw"><img src="img/aw-idle.webp" alt="Ready when you are"></div><figcaption>Before you start</figcaption></figure>
+        <figure><div class="aw"><img src="img/bg-watch.webp" alt="Workout 8 done, phone locked"></div><figcaption>Finished with the phone locked</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sync" class="dark">
+  <div class="wrap">
+    <div class="center">
+      <h2 class="rv">Phone and watch.<br>Always in step.</h2>
+      <p class="sub rv">Every tick on your wrist lands on your phone, and the other way round. Real test run, iPhone and Apple Watch side by side.</p>
+    </div>
+    <div class="pairs">
+      <div class="pair rv">
+        <div class="dev"><img class="phone" src="img/sync-a-phone.webp" alt="Phone tracker with set 1 logged and rest 1:27"><div class="aw"><img src="img/sync-a-watch.webp" alt="Watch rest 1:28"></div></div>
+        <h3>Tick on the watch</h3>
+        <p>15 × 40 kg logged on the phone, rest running on both.</p>
+      </div>
+      <div class="pair rv">
+        <div class="dev"><img class="phone" src="img/sync-c-phone.webp" alt="Phone folds the finished exercise"><div class="aw"><img src="img/sync-c-watch.webp" alt="Watch moves to 2 of 6"></div></div>
+        <h3>Moves on with you</h3>
+        <p>Last set done: the phone folds the exercise, the watch moves to 2 of 6.</p>
+      </div>
+      <div class="pair rv">
+        <div class="dev"><img class="phone" src="img/sync-d-phone.webp" alt="Phone: Workout 9 done"><div class="aw"><img src="img/sync-d-watch.webp" alt="Watch: Workout 9 done"></div></div>
+        <h3>Finish on the wrist</h3>
+        <p>Rated and completed on the watch. Saved, with the same PBs on both.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wear" class="canvas">
+  <div class="wrap">
+    <div class="center">
+      <h2 class="rv">Galaxy Watch<br>and Pixel Watch too.</h2>
+      <p class="sub rv">The same app for Wear OS. Same rules, same look, built for round screens.</p>
+    </div>
+    <div class="wear">
+      <figure class="rv"><div class="ow"><img src="img/wear-1.webp" alt="Wear OS sets"></div><figcaption>Tick the next set</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-2.webp" alt="Wear OS exercise page"></div><figcaption>Exercise page</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-3.webp" alt="Wear OS keypad"></div><figcaption>Keypad</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-4.webp" alt="Wear OS rest"></div><figcaption>Rest</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-5.webp" alt="Wear OS rating dial"></div><figcaption>Rate it</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-7.webp" alt="Wear OS celebration"></div><figcaption>Celebrate</figcaption></figure>
+      <figure class="rv"><div class="ow"><img src="img/wear-6.webp" alt="Wear OS personal bests"></div><figcaption>Personal bests</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="status" class="canvas" style="padding-top:40px">
+  <div class="wrap">
+    <h2 class="rv">Where it's at.</h2>
+    <p class="sub rv">Sunday 4 October 2026.</p>
+    <div class="status">
+      <div class="st rv"><div class="k">JF Coach web app</div><div class="v"><span class="dot" style="background:var(--ok)"></span>Live</div><div class="d">The phone side of the watch went live at 12:20. Phones without a watch see no change.</div></div>
+      <div class="st rv"><div class="k">Apple App Store</div><div class="v"><span class="dot" style="background:var(--strain)"></span>Waiting for review</div><div class="d">Version 1.0.11 with the Apple Watch app. Manual release: it goes out when you press Release.</div></div>
+      <div class="st rv"><div class="k">Your iPhone and Apple Watch</div><div class="v"><span class="dot" style="background:var(--ok)"></span>Installed</div><div class="d">TestFlight build 31 on your iPhone, still signed in. JF Coach is on your watch. Your next workout is the real test.</div></div>
+      <div class="st rv"><div class="k">Google Play</div><div class="v"><span class="dot" style="background:var(--strain)"></span>Ready, waiting</div><div class="d">1.0.10 is still in Google's review, so 1.0.11 and the Wear OS app wait for it. Both files are in Downloads on your Mac.</div></div>
+    </div>
+    <div class="facts">
+      <div class="fact rv"><div class="n">3</div><div class="l">rounds of Sol code review, every real finding fixed</div></div>
+      <div class="fact rv"><div class="n">168</div><div class="l">web tests passing, plus 28 Wear OS and 25 plugin tests</div></div>
+      <div class="fact rv"><div class="n">2</div><div class="l">end-to-end runs each round: phone open, and phone locked</div></div>
+      <div class="fact rv"><div class="n">0</div><div class="l">exercise swaps or rest edits on the watch, by design</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>JF Coach · Jamie Fitness · screens from the test run with sample data</footer>
+
+<script>
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.rv').forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + 'ms'; io.observe(el); });
+</script>
+</body>
+</html>
